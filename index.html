@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Voter Turnout 2014</title>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+		<link rel="stylesheet" type="text/css" href="css/own_style.css">
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+		<script src="js/leaflet-hash.js"></script>
+		<script src="js/Autolinker.min.js"></script>
+	</head>
+	<body>
+		<div id="map"></div>
+		<script src="data/exp_PHLVotersBivariate.js"></script>
+		<script>
+		var map = L.map('map', {
+			zoomControl:true, maxZoom:19
+		}).fitBounds([[39.8604500742,-75.3232925514],[40.1446509187,-74.9120813501]]);
+		var hash = new L.Hash(map);
+		var additional_attrib = 'created w. <a href="https://github.com/geolicious/qgis2leaf" target ="_blank">qgis2leaf</a> by <a href="http://www.geolicious.de" target ="_blank">Geolicious</a> & contributors<br>';
+		var feature_group = new L.featureGroup([]);
+		var raster_group = new L.LayerGroup([]);
+		var basemap_0 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+			attribution: additional_attrib + '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+		});	
+		basemap_0.addTo(map);	
+		var layerOrder=new Array();
+		function pop_PHLVotersBivariate(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">OBJECTID</th><td>' + Autolinker.link(String(feature.properties['OBJECTID'])) + '</td></tr><tr><th scope="row">STATEFP10</th><td>' + Autolinker.link(String(feature.properties['STATEFP10'])) + '</td></tr><tr><th scope="row">COUNTYFP10</th><td>' + Autolinker.link(String(feature.properties['COUNTYFP10'])) + '</td></tr><tr><th scope="row">TRACTCE10</th><td>' + Autolinker.link(String(feature.properties['TRACTCE10'])) + '</td></tr><tr><th scope="row">BLKGRPCE10</th><td>' + Autolinker.link(String(feature.properties['BLKGRPCE10'])) + '</td></tr><tr><th scope="row">GEOID10</th><td>' + Autolinker.link(String(feature.properties['GEOID10'])) + '</td></tr><tr><th scope="row">NAMELSAD10</th><td>' + Autolinker.link(String(feature.properties['NAMELSAD10'])) + '</td></tr><tr><th scope="row">Total_Pop</th><td>' + Autolinker.link(String(feature.properties['Total_Pop'])) + '</td></tr><tr><th scope="row">Pop_Male</th><td>' + Autolinker.link(String(feature.properties['Pop_Male'])) + '</td></tr><tr><th scope="row">Pop_Female</th><td>' + Autolinker.link(String(feature.properties['Pop_Female'])) + '</td></tr><tr><th scope="row">MedianAge</th><td>' + Autolinker.link(String(feature.properties['MedianAge'])) + '</td></tr><tr><th scope="row">PctWhite</th><td>' + Autolinker.link(String(feature.properties['PctWhite'])) + '</td></tr><tr><th scope="row">PctAfrAm</th><td>' + Autolinker.link(String(feature.properties['PctAfrAm'])) + '</td></tr><tr><th scope="row">PctAsian</th><td>' + Autolinker.link(String(feature.properties['PctAsian'])) + '</td></tr><tr><th scope="row">PctMulti</th><td>' + Autolinker.link(String(feature.properties['PctMulti'])) + '</td></tr><tr><th scope="row">PctHispLat</th><td>' + Autolinker.link(String(feature.properties['PctHispLat'])) + '</td></tr><tr><th scope="row">PctNonWht</th><td>' + Autolinker.link(String(feature.properties['PctNonWht'])) + '</td></tr><tr><th scope="row">Med_HH_Inc</th><td>' + Autolinker.link(String(feature.properties['Med_HH_Inc'])) + '</td></tr><tr><th scope="row">Households</th><td>' + Autolinker.link(String(feature.properties['Households'])) + '</td></tr><tr><th scope="row">HH_BelPov</th><td>' + Autolinker.link(String(feature.properties['HH_BelPov'])) + '</td></tr><tr><th scope="row">HH_PovRate</th><td>' + Autolinker.link(String(feature.properties['HH_PovRate'])) + '</td></tr><tr><th scope="row">Families</th><td>' + Autolinker.link(String(feature.properties['Families'])) + '</td></tr><tr><th scope="row">Occ_HU</th><td>' + Autolinker.link(String(feature.properties['Occ_HU'])) + '</td></tr><tr><th scope="row">PctOwnerOc</th><td>' + Autolinker.link(String(feature.properties['PctOwnerOc'])) + '</td></tr><tr><th scope="row">Pct_RentOc</th><td>' + Autolinker.link(String(feature.properties['Pct_RentOc'])) + '</td></tr><tr><th scope="row">PopOver18</th><td>' + Autolinker.link(String(feature.properties['PopOver18'])) + '</td></tr><tr><th scope="row">Voters_all</th><td>' + Autolinker.link(String(feature.properties['Voters_all'])) + '</td></tr><tr><th scope="row">Voters2014</th><td>' + Autolinker.link(String(feature.properties['Voters2014'])) + '</td></tr><tr><th scope="row">Turnout14</th><td>' + Autolinker.link(String(feature.properties['Turnout14'])) + '</td></tr><tr><th scope="row">AgeClass</th><td>' + Autolinker.link(String(feature.properties['AgeClass'])) + '</td></tr><tr><th scope="row">IncClass</th><td>' + Autolinker.link(String(feature.properties['IncClass'])) + '</td></tr><tr><th scope="row">OwnClass</th><td>' + Autolinker.link(String(feature.properties['OwnClass'])) + '</td></tr><tr><th scope="row">VoteClass</th><td>' + Autolinker.link(String(feature.properties['VoteClass'])) + '</td></tr><tr><th scope="row">Age_Cat</th><td>' + Autolinker.link(String(feature.properties['Age_Cat'])) + '</td></tr><tr><th scope="row">Inc_Cat</th><td>' + Autolinker.link(String(feature.properties['Inc_Cat'])) + '</td></tr><tr><th scope="row">Own_Cat</th><td>' + Autolinker.link(String(feature.properties['Own_Cat'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		function doStylePHLVotersBivariate(feature) {
+			switch (feature.properties.Own_Cat) {
+				case 'A1':
+					return {
+						weight: '1.3',
+						fillColor: '#d7d5d5',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'A2':
+					return {
+						weight: '1.3',
+						fillColor: '#d78080',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'A3':
+					return {
+						weight: '1.3',
+						fillColor: '#d72a2a',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'B1':
+					return {
+						weight: '1.3',
+						fillColor: '#87cdd5',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'B2':
+					return {
+						weight: '1.3',
+						fillColor: '#878080',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'B3':
+					return {
+						weight: '1.3',
+						fillColor: '#872a2a',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'C1':
+					return {
+						weight: '1.3',
+						fillColor: '#37abc8',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'C2':
+					return {
+						weight: '1.3',
+						fillColor: '#378080',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+				case 'C3':
+					return {
+						weight: '1.3',
+						fillColor: '#372a2a',
+						color: '#000000',
+						weight: '1',
+						dashArray: '',
+						opacity: '1.0',
+						fillOpacity: '1.0',
+					};
+					break;
+			}
+		}
+		var exp_PHLVotersBivariateJSON = new L.geoJson(exp_PHLVotersBivariate,{
+			onEachFeature: pop_PHLVotersBivariate,
+			style: doStylePHLVotersBivariate
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_PHLVotersBivariateJSON);
+
+		feature_group.addTo(map);
+		var title = new L.Control();
+		title.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+		};
+		title.update = function () {
+			this._div.innerHTML = '<h2>Voter Turnout 2014</h2>Voter turnout by Census block group in the November 2014 general election.'
+		};
+		title.addTo(map);
+	var baseMaps = {
+		'OSM Standard': basemap_0
+	};
+		L.control.layers(baseMaps,{"PHLVotersBivariate": exp_PHLVotersBivariateJSON},{collapsed:false}).addTo(map);
+		L.control.scale({options: {position: 'bottomleft',maxWidth: 100,metric: true,imperial: false,updateWhenIdle: false}}).addTo(map);
+	</script>
+</body>
+</html>
